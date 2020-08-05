@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux'
 import Box from './components/Box'
+import { Form } from 'react-bootstrap'
 
 function App() {
     const dispatch = useDispatch()
@@ -20,6 +21,16 @@ function App() {
     const changeColorBoxes = (value) => {
         dispatch({ type: "CHANGE_COLOR_BOXES", payload: value })
     }
+    const onChangeAddBox = (value) => {
+        console.log('onChangeAddBox.value:', value)
+        dispatch({ type: "CHANGE_ADD_BOXES", payload: value })
+    }
+    const addBox = (e) => {
+        if (e) {
+            e.preventDefault()
+            dispatch({ type: "ADD_BOXES", payload: state.numberBoxAdded })
+        }
+    }
 
     return (
         <div className="App">
@@ -28,6 +39,9 @@ function App() {
             <button onClick={() => decrement()}>decrement</button>
             <button onClick={() => reset()}>reset</button>
             <input onChange={(e) => changeColorBoxes(e.target.value)} placeholder="type color here" />
+            <Form onSubmit={(e) => addBox(e)}>
+                <input onChange={(e) => onChangeAddBox(e.target.value)} placeholder="type number of box" />
+            </Form>
             {state.boxes.length > 0 && state.boxes.map(box => {
                 return <Box colorBoxes={box.colorBoxes} id={box.id} colorBox={box.colorBox} colorText={box.colorText} />
             })}

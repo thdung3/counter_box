@@ -11,7 +11,8 @@ const initialState = {
     // box: {id: ... , colorBoxes: ..., colorBo: ..., colorText: ...}
     boxes: [],
     colorBoxes: 'orange',
-    colorBox: 'orange'
+    colorBox: 'orange',
+    numberBoxAdded: 0,
 };
 
 function countReducer(state = initialState, action) {
@@ -40,6 +41,22 @@ function countReducer(state = initialState, action) {
             state.boxes = []
             state.colorBoxes = 'orange'
             state.colorBox = 'orange'
+            break;
+        case "CHANGE_ADD_BOXES":
+            state.numberBoxAdded = parseInt(action.payload)
+            break;
+        case "ADD_BOXES":
+            if (!isNaN(action.payload) || action.payload > 0) {
+                for (let i = 0; i < action.payload; i++) {
+                    state.boxes.push({ id: state.count + i + 1, colorBoxes: state.colorBoxes, colorBox: null, colorText: "black" })
+                }
+                state.count += action.payload
+                if (state.count >= 3) {
+                    for (let i = 0; i < state.boxes.length; i++) {
+                        state.boxes[i].colorText = "blue"
+                    }
+                }
+            }
             break;
         case "CHANGE_COLOR_BOXES":
             state.colorBoxes = action.payload
